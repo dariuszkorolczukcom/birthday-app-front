@@ -14,6 +14,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import moment from 'moment';
 
 const useStyles = makeStyles({
   table: {
@@ -70,6 +71,11 @@ export default function MaterialUIPickers() {
     return parseInt(value[0]).toLocaleString('en-US') + " " + birthdayInfo[tableValue[0]].symbol
   }
 
+  const parseBirthdayDate = (value) => {
+    var a = moment(value[1])
+    return a.format('Do MMM YYYY')
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
@@ -99,7 +105,7 @@ export default function MaterialUIPickers() {
                 {Object.entries(tableValue[1]).map((value, key) => (
                   <TableRow key={key}>
                     <TableCell align="left">{parseTimeSinceBirthday(value,tableValue)}</TableCell>
-                    <TableCell align="right">{new Date(value[1]).toLocaleString()}</TableCell>
+                    <TableCell align="right">{parseBirthdayDate(value)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
