@@ -52,7 +52,7 @@ const birthdayInfo = {
 
 export default function MaterialUIPickers() {
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+  const [selectedDate, setSelectedDate] = React.useState(new Date('1991-01-11'));
   const [decimalBirthdays, setDecimalBirthdays] = React.useState(null);
 
   const handleDateChange = (date) => {
@@ -65,6 +65,10 @@ export default function MaterialUIPickers() {
       setDecimalBirthdays(data)
   });
   },[selectedDate])
+
+  const parseTimeSinceBirthday = (value,tableValue) => {
+    return parseInt(value[0]).toLocaleString('en-US') + " " + birthdayInfo[tableValue[0]].symbol
+  }
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -83,7 +87,7 @@ export default function MaterialUIPickers() {
         {decimalBirthdays != null &&
           <TableContainer className={classes.container} component={Paper}>
           {Object.entries(decimalBirthdays).map((tableValue, tableKey) => (
-            tableValue[0] == "birthdayDate" ? "" :
+            tableValue[0] === "birthdayDate" ? "" :
             <Table key={tableKey} className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -94,8 +98,8 @@ export default function MaterialUIPickers() {
               <TableBody>
                 {Object.entries(tableValue[1]).map((value, key) => (
                   <TableRow key={key}>
-                    <TableCell align="left">{parseInt(value[0]).toLocaleString('en-US') + " " + birthdayInfo[tableValue[0]].symbol}</TableCell>
-                    <TableCell align="right">{value[1]}</TableCell>
+                    <TableCell align="left">{parseTimeSinceBirthday(value,tableValue)}</TableCell>
+                    <TableCell align="right">{new Date(value[1]).toLocaleString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -122,4 +126,4 @@ async function postData(url = '', data = {}) {
     body: JSON.stringify(data)
   });
   return response.json();
-}
+}               
