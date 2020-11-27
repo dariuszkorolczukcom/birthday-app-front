@@ -1,5 +1,13 @@
-import 'date-fns';
 import React from 'react';
+import 'date-fns';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -7,10 +15,43 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 300,
+  },
+  container: {
+    width: "50%",
+  }
+});
+
 const api = "https://c3patn17z1.execute-api.eu-west-1.amazonaws.com/dev";
 
+const birthdayInfo = {
+  birthdayDate: {
+    def: "your actual birthday",
+  },
+  hoursDecimal: {
+    birthName: "Birth Hours",
+    header: "Decimal Hours Birthday",
+    def: "your birthday once every 100 thousand hours of your life!",
+    symbol: "hours",
+  },
+  minutesDecimal: {
+    birthName: "Birth Minutes",
+    header: "Decimal Minutes Birthday",
+    def: "your birthday once every million hours of your life!",
+    symbol: "minutes",
+  },
+  secondsDecimal: {
+    birthName: "Birth Seconds",
+    header: "Decimal Seconds Birthday",
+    def: "your birthday once every 100 million hours of your life!",
+    symbol: "seconds",
+  }
+}
+
 export default function MaterialUIPickers() {
-  // The first commit of Material-UI
+  const classes = useStyles();
   const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
   const [decimalBirthdays, setDecimalBirthdays] = React.useState(null);
 
@@ -21,7 +62,7 @@ export default function MaterialUIPickers() {
   React.useEffect(() => {
     postData(api+'/birthday', { birthday: selectedDate })
     .then(data => {
-      console.log(data);
+      setDecimalBirthdays(data)
   });
   },[selectedDate])
 
@@ -39,6 +80,28 @@ export default function MaterialUIPickers() {
             'aria-label': 'birthday date',
           }}
         />
+        {decimalBirthdays != null &&
+          <TableContainer className={classes.container} component={Paper}>
+          {Object.entries(decimalBirthdays).map((tableValue, tableKey) => (
+            tableValue[0] == "birthdayDate" ? "" :
+            <Table key={tableKey} className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>{birthdayInfo[tableValue[0]].birthName}</TableCell>
+                  <TableCell align="right">{birthdayInfo[tableValue[0]].header}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.entries(tableValue[1]).map((value, key) => (
+                  <TableRow key={key}>
+                    <TableCell align="left">{parseInt(value[0]).toLocaleString('en-US') + " " + birthdayInfo[tableValue[0]].symbol}</TableCell>
+                    <TableCell align="right">{value[1]}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>))}
+          </TableContainer>
+        }
       </Grid>
     </MuiPickersUtilsProvider>
   );
@@ -47,17 +110,16 @@ export default function MaterialUIPickers() {
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    redirect: 'follow', 
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
   });
-  return response.json(); // parses JSON response into native JavaScript objects
+  return response.json();
 }
