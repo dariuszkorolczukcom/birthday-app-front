@@ -6,7 +6,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import BirthTable from './components/BirthTable'
+import BirthTable from '../components/BirthTable'
+import { postData } from '../util/http'
 
 const api = "https://c3patn17z1.execute-api.eu-west-1.amazonaws.com/dev";
 
@@ -46,20 +47,4 @@ export default function MaterialUIPickers() {
     </MuiPickersUtilsProvider>
   );
 }
-
-async function postData(url = '', data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    redirect: 'follow', 
-    referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data)
-  });
-  return response.json();
-}               
+           

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
+import { birthdayInfo } from '../util/info'
 
 const useStyles = makeStyles({
     table: {
@@ -18,32 +18,6 @@ const useStyles = makeStyles({
       width: "50%",
     }
   });
-
-
-
-const birthdayInfo = {
-    birthdayDate: {
-      def: "your actual birthday",
-    },
-    hoursDecimal: {
-      birthName: "Birth Hours",
-      header: "Decimal Hours Birthday",
-      def: "your birthday once every 100 thousand hours of your life!",
-      symbol: "hours",
-    },
-    minutesDecimal: {
-      birthName: "Birth Minutes",
-      header: "Decimal Minutes Birthday",
-      def: "your birthday once every million hours of your life!",
-      symbol: "minutes",
-    },
-    secondsDecimal: {
-      birthName: "Birth Seconds",
-      header: "Decimal Seconds Birthday",
-      def: "your birthday once every 100 million hours of your life!",
-      symbol: "seconds",
-    }
-  }
   
 export default function BirthTable(props) {
     const classes = useStyles();
