@@ -84,6 +84,7 @@ export default function BirthTable(props) {
             index={value}
             onChangeIndex={handleChangeIndex}>
             {Object.entries(birthdays).map((tableValue, tableKey) => 
+              value === tableKey &&
                 <TabContainer key={tableKey}>
                   <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -92,14 +93,14 @@ export default function BirthTable(props) {
                         <TableCell align="right">{birthdayInfo[tableValue[0]].header2}</TableCell>
                       </TableRow>
                     </TableHead>
-                    <TableBody>
                       {Object.entries(tableValue[1]).map((rowValue, rowKey) =>
+                    <TableBody>
                           <TableRow key={rowKey}>
                             <TableCell align="left">{parseTimeSinceBirthday(rowValue,tableValue)}</TableCell>
                             <TableCell align="right">{parseBirthdayDate(rowValue)}</TableCell>
                           </TableRow>
-                      )}
                     </TableBody>
+                      )}
                 </Table>
               </TabContainer>)}
           </SwipeableViews>
